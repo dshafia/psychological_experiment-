@@ -15,7 +15,9 @@ def process_student_info():
     data = "hello world"
     if (request.method == 'POST'):
         excel_login_inf(request.json)
-    return redirect(url_for('consent_page'), code=307)
+        return redirect(url_for('consent_page'))
+    else:
+        return redirect(url_for('loginpage'))
 
 
 @app.route('/process_student_demographic_info', methods=['GET', 'POST'])
@@ -26,14 +28,16 @@ def process_student_demographic_info():
         return {'data': data}
         #return redirect(url_for('consent_page'), code=307)
 
-
-@app.route('/consentpage', methods = ['GET', 'POST'])
-def consent_page():
-    return render_template("consentpage.html")
+@app.route('/game_placeholder')
+def game1_placeholder():
+    return render_template("game1_placeholder.html")
 
 @app.route('/demographic_info')
 def demograph():
     return render_template("demographic.html")
+@app.route('/consentpage', methods = ['GET', 'POST'])
+def consent_page():
+    return render_template("consentpage.html")
 
 @app.route('/')
 def loginpage():
