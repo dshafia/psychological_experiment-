@@ -1,0 +1,33 @@
+<!doctype HTML>
+<html>
+<head>
+<title> Student Log-in </title>
+
+<link rel="stylesheet" type = "text/css" href="{{ url_for('static', filename = 'css/consentpage.css')}}" />
+
+</head>
+
+<body>
+
+<div class = "purdue_img">
+<img src="{{ url_for('static', filename = 'image/purdue.png')}}" alt = "Purdue" width = "1000px" height = "100px">
+</div>
+
+
+<div class = "form_div">
+<p1>The experimental method in psychology helps us learn more about how people think and why they behave the way they do. <br>Experimental psychologists can research a variety of topics using many different experimental methods.
+  <br>Each one contributes to what we know about the mind and human behavior.<br> Physiology is the study of how the human body works. <br>It describes the chemistry and physics behind basic body functions, from how molecules behave in cells to how systems of organs work together.<br>
+  It helps us understand what happens in a healthy body in everyday life and what goes wrong when someone gets sick</p1>
+<br>
+<br>
+<form action="">
+  <input type="checkbox" id="consent" name="consent" value="consent">
+  <label>I Acknowledge That I Have Read And Understand The Terms</label>
+  <br><input type="submit" value="Next" onclick = "validate()">
+</form>
+</div>
+
+
+
+</body>
+</html>
