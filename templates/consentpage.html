@@ -20,10 +20,10 @@
   It helps us understand what happens in a healthy body in everyday life and what goes wrong when someone gets sick</p1>
 <br>
 <br>
-<form action="">
-  <input type="checkbox" id="consent" name="consent" value="consent">
+<form action="{{ url_for('student.demo_page')}}">
+  <input type="checkbox" id="consent" name="consent" value="consent" required/>
   <label>I Acknowledge That I Have Read And Understand The Terms</label>
-  <br><input type="submit" value="Next" onclick = "validate()">
+  <br><input type="submit" value="Next">
 </form>
 </div>
 

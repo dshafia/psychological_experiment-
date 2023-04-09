@@ -4,7 +4,6 @@
 <title> Student Log-in </title>
 
 <link rel="stylesheet" type = "text/css" href="{{ url_for('static', filename = 'css/demographics.css')}}" />
-  <script defer src="{{ url_for('static', filename = 'js/demographic.js')}}"></script>
 
 </head>
 
@@ -16,18 +15,18 @@
 
 
 <div class = "form_div">
-<form action="/" id="demographicForm">
-  <label for="fname">What gender do you identify as?</label>
+<form action="{{ url_for('student.demo_page')}}" id="demographicForm", method="POST">
+  <label for="gender">What gender do you identify as?</label>
   <input type="text" id="gender" name="gender" placeholder=""><br><br>
-  <label for="lname">What is your age?</label>
+  <label for="age">What is your age?</label>
   <input type="text" id="age" name="age" placeholder=""><br><br>
-    <label for="lname">What class do you belong to?</label>
+  <label for="cls">What class do you belong to?</label>
   <input type="text" id="demo_cls" name="demo_cls" placeholder=""><br><br>
-    <label for="lname">What is your address?</label>
+  <label for="address">What is your address?</label>
   <input type="text" id="address" name="address" placeholder=""><br><br>
   <br><input type="submit" value="Submit" onclick = "validate()">
 </form>
-    <div>
+</div>
 
 
 

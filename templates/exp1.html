@@ -1,0 +1,41 @@
+<!doctype HTML>
+<html>
+<head>
+<title> Student Log-in </title>
+
+<link rel="stylesheet" type = "text/css" href="{{ url_for('static', filename = 'css/personality.css')}}" />
+
+</head>
+
+<body>
+
+<div class = "purdue_img">
+<img src="{{ url_for('static', filename = 'image/purdue.png')}}" alt = "Purdue" width = "1000px" height = "100px">
+</div>
+
+
+<div class = "form_div">
+<form action="{{ url_for('student.exp1')}}" id="demographicForm", method="POST">
+  <label for="per_qs1">how did you feel the experiment was ?</label><br>
+  <input type="checkbox" id="QS1A" name="exp1qs1" value="agree">
+  <label for="A"> Agree</label><br>
+  <input type="checkbox" id="QS1N" name="exp1qs1" value="neutral">
+  <label for="N"> Neural</label><br>
+  <input type="checkbox" id="QS1D" name="exp1qs1" value="disagree">
+  <label for="D"> Disagree</label><br><br>
+
+  <label for="per_qs2">I hate Web Development ?</label><br>
+  <input type="checkbox" id="QS2A" name="exp1qs2" value="agree">
+  <label for="A"> Agree</label><br>
+  <input type="checkbox" id="QS2N" name="exp1qs2" value="neutral">
+  <label for="N"> Neural</label><br>
+  <input type="checkbox" id="QS2D" name="exp1qs2" value="disagree">
+  <label for="D"> Disagree</label><br><br>
+  <br><input type="submit" value="Submit" onclick = "validate()">
+</form>
+</div>
+
+
+
+</body>
+</html>
