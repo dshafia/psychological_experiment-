@@ -47,7 +47,7 @@ h1
   font-weight: bold;
 }
 
-input[type=text], select, input[type=button] {
+input[type=text], select, input[type=button], input[type=password] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -87,4 +87,10 @@ input[type=submit]:hover {
 label {
    font-size: 1.5em;
    font-weight: bold;
+}
+
+.form-control form-control-lg is-invalid
+{
+    color: red;
+    font-weight: bold;
 }

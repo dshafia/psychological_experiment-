@@ -1,0 +1,50 @@
+<!doctype HTML>
+<html>
+<head>
+<title> Student Log-in </title>
+
+<link rel="stylesheet" type = "text/css" href="{{ url_for('static', filename = 'css/loginpage.css')}}" />
+
+</head>
+
+<body>
+
+<div class = "purdue_img">
+<img src="{{ url_for('static', filename = 'image/purdue.png')}}" alt = "Purdue" width = "1000px" height = "100px">
+</div>
+
+
+<div class = "form_div">
+<form action="{{ url_for('admin.admin_login')}}" id="loginForm", method="POST">
+  {{ form.hidden_tag() }}
+  {{ form.username.label }}
+  {% if form.username.errors %}
+  {{ form.username(class="form-control form-control-lg is-invalid") }}
+  <div class="invalid-feedback">
+    {% for error in form.username.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+  </div>
+  {% else %}
+  {{ form.username(class="form-control form-control-lg") }}<br>
+  {% endif %}
+
+  <br>{{ form.password.label(class="form-control-label") }}
+  {% if form.password.errors %}
+  {{ form.password(class="form-control form-control-lg is-invalid") }}
+    <div class="invalid-feedback">
+      {% for error in form.password.errors %}
+      <span>{{ error }}</span>
+      {% endfor %}
+    </div>
+  {% else %}
+  {{ form.password(class="form-control form-control-lg") }}
+  {% endif %}
+
+  {{ form.login(class="btn btn-outline-info") }}
+</form>
+</div>
+
+</body>
+</html>
+
