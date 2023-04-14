@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, Blueprint, flash
 import random
 import json
-import pandas as pd
+from flask_cors import CORS, cross_origin
 
 student = Blueprint("student", __name__)
+
+results = {}
 
 #student = Flask(__name__)
 
@@ -35,72 +37,76 @@ def process_student_demographic_info():
 
 @student.route('/exp2')
 def exp2():
+    result = []
+    if request.method == "Post":
+        print("In EXP2")
+        data = request.form.getlist("exp2qs1")
+        result.append(data[0])
+        data = request.form.getlist("exp2qs2")
+        result.append(data[0])
+        print(result)
+
     return render_template("exp2.html")
 
 @student.route('/exp1')
 def exp1():
+    result = []
     if request.method == "POST":
         print("In EXP1")
+        data = request.form.getlist("exp1qs1")
+        result.append(data[0])
+        data = request.form.getlist("exp1qs2")
+        result.append(data[0])
+        print(result)
     return render_template("exp1.html")
 
-@student.route('/game_placeholder')
+@student.route('/CG')
 def game1_placeholder():
     if request.method == "POST":
-        print("In EXP2")
+        print("In CG")
     return render_template("CG.html")
 
 @student.route('/game_link')
 def game_link():
     return redirect("https://playpager.com/embed/checkers/index.html")
 
-@student.route('/personality', methods=['GET','POST'] )
+@student.route('/personality', methods=['POST'] )
 def personality():
-    results = ""
-    num = 0
-    if request.method == "POST":
-        data = request.form.getlist("perqs1")
-        results = results + data[0] + "$"
-        data = request.form.getlist("perqs2")
-        results = results + data[0] + "$"
+    try:
         num = random.randint(1, 3)
-        print(num)
-        if (num == 1):
-            return redirect(url_for('student.game1_placeholder'))
-        elif(num == 2):
-            return redirect(url_for('student.exp1'))
-        else:
-            return redirect(url_for('student.exp2'))
-    return render_template("personality.html")
-
-@student.route('/demographic_info', methods=['GET','POST'])
-def demo_page():
-    if request.method == "POST":
-        data = request.form
+        data = json.loads(request.data)
         print(data)
-        return redirect(url_for('student.personality'))
-    return render_template("demographic.html")
+        "store it in CSV"
+        return jsonify({"status": 200, "message": "Sucessfully logged in " + str(num)})
+    except Exception as e:
+        return jsonify({"status": 500, "message": "Internal server error" + str(e)})
 
-@student.route('/consentpage', methods=['GET','POST'])
+
+
+@student.route('/demographic_info', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def demo_page():
+    try:
+        data = json.loads(request.data)
+        "store it in CSV"
+        return jsonify({"status": 200,"message": "Sucessfully recieved DemoGraphic info "})
+    except Exception as e:
+        return jsonify({"status": 500, "message": "Internal server error" + str(e)})
+
+@student.route('/consent', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def consent_page():
-    return render_template("consentpage.html")
+    return jsonify({"status": 200, "message": "Sucessfully logged in "})
 
-@student.route('/', methods=['GET', 'POST'])
+@student.route('/login', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def loginpage():
-    details = {}
-    if request.method == "POST":
-        fname = request.form.get("fname")
-        lname = request.form.get("lname")
-        cls = request.form.get("class")
-        if fname == "" and lname == "" and cls == "":
-            flash('Please enter valid details', category='error')
-        else:
-            details["fname"] = fname
-            details["lname"] = lname
-            details["cls"] = cls
-            print(details)
-            excel_login_inf(details)
-            return redirect(url_for('student.consent_page'))
-    return render_template("Login.html")
+    try:
+        data = json.loads(request.data)
+        "store it in CSV"
+        return jsonify({"status": 200,"message": "Sucessfully logged in " + data["fname"]})
+    except Exception as e:
+        return jsonify({"status": 500, "message": "Internal server error" + str(e)})
 
 
 '''if __name__ == '__main__':

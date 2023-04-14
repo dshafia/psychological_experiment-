@@ -9,22 +9,6 @@
 
 <body>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            {% if category == 'error' %}
-                <div class="flash" role="alert">
-                {{ message }}
-                <button type="button" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-
-
 <div class = "purdue_img">
 <img src="{{ url_for('static', filename = 'image/purdue.png')}}" alt = "Purdue" width = "1000px" height = "100px">
 </div>
