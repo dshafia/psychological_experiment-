@@ -2,19 +2,14 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, B
 import random
 import json
 from flask_cors import CORS, cross_origin
+from database import db
 
 student = Blueprint("student", __name__)
 
 results = {}
 
-#student = Flask(__name__)
-
 def excel_login_inf(data):
     pass
-    #print(student_info)
-    #login_list = pd.read_json(student_info)
-    #print(type(login_list))
-    #print(login_list)
 
 @student.route('/process_student_info', methods=['GET', 'POST'])
 def process_student_info():
@@ -24,15 +19,6 @@ def process_student_info():
         return redirect(url_for('student.consent_page'))
     else:
         return redirect(url_for('http://127.0.0.1:5000/consentpage'))
-
-
-'''@student.route('/process_student_demographic_info', methods=['GET', 'POST'])
-def process_student_demographic_info():
-    data = "hello world"
-    if (request.method == 'POST'):
-        excel_login_inf(request.json)
-        return {'data': data}
-        #return redirect(url_for('consent_page'), code=307)'''
 
 
 @student.route('/exp2')
@@ -76,26 +62,39 @@ def personality():
         num = random.randint(1, 3)
         data = json.loads(request.data)
         print(data)
-        "store it in CSV"
-        return jsonify({"status": 200, "message": "Sucessfully logged in " + str(num)})
+        """ Check if the user exists already in the DB.
+            If yes, add the demographic information to the user record.
+            Else, return user doesn't exist error. """
+        isExistingUser = db.users.find_one({"fname" : data["user"]})
+        if isExistingUser:
+            db.users.update_one({"fname" : data["user"]}, {"$set" : {"gender" : data["gender"], "age" : data["age"], "demo_cls":data["demo_cls"], "address" : data["address"]}})
+            return jsonify({"status": 200,"message": "Sucessfully recieved DemoGraphic info for user " + str(data["user"])})
+        else:
+            return jsonify({"status": 404,"message": "User not found"})
     except Exception as e:
         return jsonify({"status": 500, "message": "Internal server error" + str(e)})
-
-
 
 @student.route('/demographic_info', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def demo_page():
     try:
         data = json.loads(request.data)
-        "store it in CSV"
-        return jsonify({"status": 200,"message": "Sucessfully recieved DemoGraphic info "})
+        """ Check if the user exists already in the DB.
+            If yes, add the demographic information to the user record.
+            Else, return user doesn't exist error. """
+        isExistingUser = db.users.find_one({"fname" : data["user"]})
+        if isExistingUser:
+            db.users.update_one({"fname" : data["user"]}, {"$set" : {"gender" : data["gender"], "age" : data["age"], "demo_cls":data["demo_cls"], "address" : data["address"]}})
+            return jsonify({"status": 200,"message": "Sucessfully recieved DemoGraphic info for user " + str(data["user"])})
+        else:
+            return jsonify({"status": 404,"message": "User not found"})
     except Exception as e:
         return jsonify({"status": 500, "message": "Internal server error" + str(e)})
 
 @student.route('/consent', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def consent_page():
+    # Store the consent for this user
     return jsonify({"status": 200, "message": "Sucessfully logged in "})
 
 @student.route('/login', methods=['POST'])
@@ -103,14 +102,12 @@ def consent_page():
 def loginpage():
     try:
         data = json.loads(request.data)
-        "store it in CSV"
-        return jsonify({"status": 200,"message": "Sucessfully logged in " + data["fname"]})
+        """ Check if the user exists already in the DB.
+            If no, create a new user.
+            Else, do nothing. """
+        isExistingUser = db.users.find_one({"fname" : data["fname"]})
+        if not isExistingUser:
+            db.users.insert_one({"fname" : data["fname"], "lname" : data["lname"], "cls" : data["cls"]})
+        return jsonify({"status": 200,"message": "Sucessfully logged in " + data["fname"], "loggedin_user" :  data["fname"]})
     except Exception as e:
         return jsonify({"status": 500, "message": "Internal server error" + str(e)})
-
-
-'''if __name__ == '__main__':
-    student.run(degu)
-
-    "https://www.codespeedy.com/how-to-pass-javascript-variables-to-python-in-flask/"
-    https://www.youtube.com/watch?v=dam0GPOAvVI&ab_channel=TechWithTim'''
