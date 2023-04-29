@@ -91,6 +91,16 @@ def demo_page():
     except Exception as e:
         return jsonify({"status": 500, "message": "Internal server error" + str(e)})
 
+@student.route('/saveExperiment', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def save_experiment():
+    try:
+        data = json.loads(request.data)
+        db.experimentResults.insert_one(data)
+        return jsonify({"status": 200,"message": "Sucessfully saved Experiment info for user " + str(data["user"])})
+    except Exception as e:
+        return jsonify({"status": 500, "message": "Internal server error" + str(e)})
+
 @student.route('/consent', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def consent_page():
