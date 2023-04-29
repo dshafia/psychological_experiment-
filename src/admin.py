@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, B
 import json
 import datetime
 from database import db
+from bson import json_util
 admin = Blueprint('admin', __name__)
 
 
@@ -40,15 +41,26 @@ def add_category():
     try:
         data = json.loads(request.data)
         """ Add the category entered into the category collection and also each category would have a list of questions. """
-        isExistingCategory = db.admins.find_one({"categoryName" : data["categoryName"]})
-        if not isExistingCategory:
-            db.categories.insert_one({"categoryName" : data["categoryName"], "questions" : data["questions"], "createdBy" : data["admin"], "createdAt" : datetime.datetime.now()})
-            return jsonify({"status": 200,"message": "Sucessfully added Category " + str(data["categoryName"])})
-        else:
-            return jsonify({"status": 409,"message": "Category already exists!"})
+        db.categories.update_one({"categoryName" : data["categoryName"]},{"$set" :{"questions" : data["questions"], "createdBy" : data["admin"], "createdAt" : datetime.datetime.now()}}, upsert=True)
+        return jsonify({"status": 200,"message": "Sucessfully added Category " + str(data["categoryName"])})
+        # else:
+        #     return jsonify({"status": 409,"message": "Category already exists!"})
     except Exception as e:
         return jsonify({"status": 500, "message": "Internal server error" + str(e)})
 
+@admin.route("/getCategory", methods=['POST'])
+def get_category():
+    try:
+        data = json.loads(request.data)
+        categoryDetails = db.categories.find_one({"categoryName" : data["categoryName"]})
+        print("categoryDetails ", type(categoryDetails))
+        if categoryDetails:
+            del categoryDetails["_id"]
+            return jsonify({"status": 200,"result":categoryDetails})
+        else:
+            return jsonify({"status": 404,"message": "Category doesn't exists!"})
+    except Exception as e:
+        return jsonify({"status": 500, "message": "Internal server error" + str(e)})
 
 @admin.route("/addQuestions", methods=['POST'])
 def add_questions():
